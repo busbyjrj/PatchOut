@@ -4,7 +4,7 @@
 import os
 import numpy as np
 from osgeo import gdal
-from utils import create_image_by_roi, create_mask_for_testing_by_roi, sample_labels_all
+from utils import create_image_by_roi, create_mask_for_testing_by_roi, sample_labels_all, create_testing_dataset
 
 image_path = "./Qingpu_HSI_image.dat"
 gt_path = "./Qingpu_HSI_gt.dat"
@@ -44,3 +44,10 @@ src_dir = r"./train/gt"
 train_dir = r"./train/gt_train_" + str(train_samples)
 val_dir = r"./train/gt_val_" + str(train_samples)
 sample_labels_all(src_dir, train_dir, val_dir, train_samples)
+
+
+# create testing dataset with padding
+src_file = "./data/Qingpu_HSI_image.dat"
+mean_std_file = "./data/Qingpu_HSI_mean_std.txt"
+dst_file = "./data/test/Qingpu_HSI_image_norm_padding.dat"
+create_testing_dataset(src_file, dst_file, mean_std_file)

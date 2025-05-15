@@ -1,0 +1,16 @@
+roi_image_1 ./data/train/image/roi_image_1.npy ./data/train/gt_train_5000/train_gt_1.npy
+roi_image_10 ./data/train/image/roi_image_10.npy ./data/train/gt_train_5000/train_gt_10.npy
+roi_image_11 ./data/train/image/roi_image_11.npy ./data/train/gt_train_5000/train_gt_11.npy
+roi_image_12 ./data/train/image/roi_image_12.npy ./data/train/gt_train_5000/train_gt_12.npy
+roi_image_13 ./data/train/image/roi_image_13.npy ./data/train/gt_train_5000/train_gt_13.npy
+roi_image_14 ./data/train/image/roi_image_14.npy ./data/train/gt_train_5000/train_gt_14.npy
+roi_image_15 ./data/train/image/roi_image_15.npy ./data/train/gt_train_5000/train_gt_15.npy
+roi_image_16 ./data/train/image/roi_image_16.npy ./data/train/gt_train_5000/train_gt_16.npy
+roi_image_2 ./data/train/image/roi_image_2.npy ./data/train/gt_train_5000/train_gt_2.npy
+roi_image_3 ./data/train/image/roi_image_3.npy ./data/train/gt_train_5000/train_gt_3.npy
+roi_image_4 ./data/train/image/roi_image_4.npy ./data/train/gt_train_5000/train_gt_4.npy
+roi_image_5 ./data/train/image/roi_image_5.npy ./data/train/gt_train_5000/train_gt_5.npy
+roi_image_6 ./data/train/image/roi_image_6.npy ./data/train/gt_train_5000/train_gt_6.npy
+roi_image_7 ./data/train/image/roi_image_7.npy ./data/train/gt_train_5000/train_gt_7.npy
+roi_image_8 ./data/train/image/roi_image_8.npy ./data/train/gt_train_5000/train_gt_8.npy
+roi_image_9 ./data/train/image/roi_image_9.npy ./data/train/gt_train_5000/train_gt_9.npy

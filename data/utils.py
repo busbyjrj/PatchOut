@@ -147,3 +147,44 @@ def sample_labels_all(src_dir, train_dir, test_dir, train_samples):
         ds = None
         np.save(test_file.replace(".dat", ".npy"), MATRIX)
         print("Test %s is processed." % test_file)
+
+
+
+def create_testing_dataset(src_file, dst_file, mean_std_file):
+
+    mean = np.loadtxt(mean_std_file)[:, 0]
+    std = np.loadtxt(mean_std_file)[:, 1]
+
+    src_ds = gdal.Open(src_file)
+    x = src_ds.RasterXSize
+    y = src_ds.RasterYSize
+    band = src_ds.RasterCount
+
+    x_new = x + 256 + 512 - (x + 256) % 512
+    y_new = y + 256 + 512 - (y + 256) % 512
+
+    # setting BIP format
+    dst_ds = gdal.GetDriverByName('ENVI').Create(dst_file, x_new, y_new, band, gdal.GDT_Float32)
+    dst_ds.SetGeoTransform(src_ds.GetGeoTransform())
+    dst_ds.SetProjection(src_ds.GetProjection())
+
+    # create full data array and write once
+    for i in range(band):
+        print(i)
+        data = src_ds.GetRasterBand(i + 1).ReadAsArray()
+        data = (data - mean[i][np.newaxis, np.newaxis]) / std[i][np.newaxis, np.newaxis]
+        data = np.pad(data, ((256, 0), (256, 0)), 'symmetric')
+        h, w = data.shape
+        h_padding = 512 - h % 512
+        w_padding = 512 - w % 512
+        data = np.pad(data, ((0, h_padding), (0, w_padding)), 'symmetric')
+        dst_ds.GetRasterBand(i + 1).WriteArray(data)
+
+    src_ds = None
+    dst_ds = None
+
+if __name__ == "__main__":
+    src_file = "./Qingpu_HSI_image.dat"
+    mean_std_file = "./Qingpu_HSI_mean_std.txt"
+    dst_file = "./test/Qingpu_HSI_image_norm_padding.dat"
+    create_testing_dataset(src_file, dst_file, mean_std_file)
