@@ -8,7 +8,6 @@ from thop import profile
 from torchinfo import summary
 from model.MSSSFF import MSSSFF
 from model.utils import ConvBlock, TransBlock, UpTransBlock, UpConvBlock
-from torch.cuda.amp import autocast
 from torch.nn.modules.utils import _pair
 
 
@@ -76,7 +75,6 @@ class PatchOut(nn.Module):
         self.outc = nn.Conv2d(base_channel, num_classes, kernel_size=(1, 1), stride=(1, 1))
         self.last_activation = nn.Sigmoid()
 
-    @autocast()
     def forward(self, x):
         x1 = self.inc0(x)
         x2 = self.down1(x1)
