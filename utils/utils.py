@@ -57,83 +57,6 @@ def accuracy_test(output, target, topk=(1,), ignored_labels=None):
     return res
 
 
-def metrics(prediction, target, ignored_labels=None, n_classes=None):
-    """Compute and print metrics (accuracy, confusion matrix and F1 scores).
-
-    Args:
-        prediction: list of predicted labels
-        target: list of target labels
-        ignored_labels (optional): list of labels to ignore, e.g. 0 for undef
-        n_classes (optional): number of classes, max(target) by default
-    Returns:
-        accuracy, F1 score by class, confusion matrix
-    """
-
-    if ignored_labels is None:
-        ignored_labels = []
-    ignored_mask = np.zeros(target.shape[:2], dtype=bool)
-    for l in ignored_labels:
-        ignored_mask[target == l] = True
-    ignored_mask = ~ignored_mask
-
-    if ignored_mask.shape[0] != prediction.shape[0]:
-        cha = ignored_mask.shape[0] - prediction.shape[0]
-        ignored_mask = ignored_mask[int(cha / 2) - 1:-(int(cha / 2) + 1), int(cha / 2) - 1:-(int(cha / 2) + 1)]
-        target = target[int(cha / 2) - 1:-(int(cha / 2) + 1), int(cha / 2) - 1:-(int(cha / 2) + 1)]
-
-    target = target[ignored_mask]
-    prediction = prediction[ignored_mask]
-
-    results = {}
-
-    n_classes = np.max(target) + 1 if n_classes is None else n_classes
-
-    cm = confusion_matrix(
-        target - 1,
-        prediction - 1,
-        labels=range(n_classes))
-
-    results["Confusion matrix"] = cm
-    results["E ACC"] = [cm[x][x] / np.sum(cm[x, :]) for x in range(len(cm))]
-
-    # Compute global accuracy
-    total = np.sum(cm)
-    accuracy = sum([cm[x][x] for x in range(len(cm))])
-    accuracy *= 100 / float(total)
-
-    results["OA"] = accuracy
-
-    # Compute F1 score
-    F1scores = np.zeros(len(cm))
-    for i in range(len(cm)):
-        try:
-            F1 = 2. * cm[i, i] / (np.sum(cm[i, :]) + np.sum(cm[:, i]))
-        except ZeroDivisionError:
-            F1 = 0.
-        F1scores[i] = F1
-
-    results["F1 scores"] = F1scores
-
-    # Compute kappa coefficient
-    pa = np.trace(cm) / float(total)
-    pe = np.sum(np.sum(cm, axis=0) * np.sum(cm, axis=1)) / float(total * total)
-    kappa = (pa - pe) / (1 - pe)
-    results["Kappa"] = kappa
-
-    # Compute the average precision and recall score by renjie
-    precision = np.zeros(n_classes)
-    recall = np.zeros(n_classes)
-    for i in range(n_classes):
-        precision[i] = cm[i, i] / np.sum(cm[i, :])
-        recall[i] = cm[i, i] / np.sum(cm[:, i])
-    average_precision = np.mean(precision)
-    average_recall = np.mean(recall)
-    results["Average precision"] = average_precision
-    results["Average recall"] = average_recall
-
-    return results
-
-
 def save_checkpoint(state, is_best, save_path):
     epoch = state['epoch']
     file_path = os.path.join(save_path, "epoch_{}.pth".format(epoch))
@@ -141,10 +64,6 @@ def save_checkpoint(state, is_best, save_path):
     if is_best:
         best_save_path = os.path.join(save_path, 'model_best.pth.tar')
         shutil.copyfile(file_path, best_save_path)
-
-
-def count_parameters_in_MB(model):
-    return sum(p.numel() for p in model.parameters()) / 1000000.0
 
 
 def load_pretrained_model(model, pretrained_dict):

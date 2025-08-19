@@ -24,7 +24,7 @@ from dataset.dataset_for_Qingpu_HSI import build_Qingpu_HSI_dataset
 from dataset.dataset_for_Qingpu_HSI_val import build_Qingpu_HSI_Dataset_for_val
 from model.PatchOut import PatchOut
 from ops_FCN_Sample import FCN_train_one_epoch, FCN_test_one_epoch
-from utils.utils import save_checkpoint, count_parameters_in_MB, metrics, load_pretrained_model
+from utils.utils import save_checkpoint, load_pretrained_model
 
 
 parser = argparse.ArgumentParser(description='train base net')
