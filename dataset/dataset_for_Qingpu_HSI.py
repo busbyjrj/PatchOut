@@ -40,8 +40,7 @@ class Qingpu_HSI_Dataset_subminibatch(dataset.Dataset):
         # set list lenght = 9999 to make sure seeds enough
         # 2 << 31 -1  ==  2**31
         self._seed = np_seed
-        current_seconds = int(time.time())
-        self._rs = np.random.RandomState(self._seed + current_seconds)
+        self._rs = np.random.RandomState(self._seed)
         self.seeds_for_minibatchsample = [
             e for e in self._rs.randint(low=2 << 31 - 1, size=9999)]
 
